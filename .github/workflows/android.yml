@@ -28,7 +28,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - uses: android-actions/setup-android@v3
+      # O runner ubuntu-latest já traz o Android SDK (ANDROID_HOME); o Gradle baixa o que faltar.
+      - name: Aceitar licenças do Android SDK
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
 
       - name: Dependências
         run: npm ci
