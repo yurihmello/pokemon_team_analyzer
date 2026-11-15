@@ -1,0 +1,63 @@
+# Gera o APK Android (Capacitor) a cada push na main e publica em
+# Releases → "apk-latest", com um link fixo para download:
+#   https://github.com/<usuário>/<repositório>/releases/download/apk-latest/PokemonTeamAnalyzer.apk
+name: Gerar APK (Android)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v3
+
+      - name: Dependências
+        run: npm ci
+      - name: Montar app (pasta www)
+        run: node tools/build-web.mjs --www
+      - name: Criar projeto Android
+        run: npx cap add android
+      - name: Ícone e splash do app
+        continue-on-error: true
+        run: npx --yes @capacitor/assets generate --android --assetPath resources
+      - name: Sincronizar
+        run: npx cap sync android
+      - name: Compilar APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+      - name: Renomear
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk PokemonTeamAnalyzer.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PokemonTeamAnalyzer-apk
+          path: PokemonTeamAnalyzer.apk
+
+      - name: Publicar em Releases (apk-latest)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete apk-latest --yes --cleanup-tag || true
+          gh release create apk-latest PokemonTeamAnalyzer.apk \
+            --target "$GITHUB_SHA" \
+            --title "APK mais recente" \
+            --notes "Versão de teste gerada automaticamente a partir de ${GITHUB_SHA::7}. Para instalar: baixe o APK no celular Android e permita instalar apps desta fonte."

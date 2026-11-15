@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pokémon Team Analyzer</title>
+  <meta name="description" content="Monte, analise e otimize times Pokémon considerando o jogo escolhido.">
+  <meta name="theme-color" content="#d32f3f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Team Analyzer">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell" id="shell">
+    <div class="shell-inner">
+      <a class="brand" href="#/" aria-label="Pokémon Team Analyzer — início">
+        <span class="lens" aria-hidden="true"></span>
+        <span class="brand-text">Pokémon Team Analyzer</span>
+      </a>
+      <div class="shell-game" id="shell-game"></div>
+      <nav class="tabs" id="tabs" aria-label="Ferramentas"></nav>
+    </div>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <div id="modal-root"></div>
+  <div id="toast-root" aria-live="polite"></div>
+
+  <!-- 1. Núcleo -->
+  <script src="core/pta.js"></script>
+
+  <!-- 2. Dados (tipos, banco gerado, configs de jogo, disponibilidade gerada) -->
+  <script src="data/types.js"></script>
+  <script src="data/generated/type-charts.js"></script>
+  <script src="data/generated/pokemon-db.js"></script>
+  <script src="data/generated/sprites.js"></script>
+  <script src="data/adjustments.js"></script>
+  <script src="data/games/legends-za.js"></script>
+  <script src="data/games/scarlet-violet.js"></script>
+  <script src="data/games/legends-arceus.js"></script>
+  <script src="data/games/brilliant-diamond-shining-pearl.js"></script>
+  <script src="data/games/sword-shield.js"></script>
+  <script src="data/games/x-y.js"></script>
+  <script src="data/generated/availability/legends-za.js"></script>
+  <script src="data/generated/availability/scarlet-violet.js"></script>
+  <script src="data/generated/availability/legends-arceus.js"></script>
+  <script src="data/generated/availability/brilliant-diamond-shining-pearl.js"></script>
+  <script src="data/generated/availability/sword-shield.js"></script>
+  <script src="data/generated/availability/x-y.js"></script>
+
+  <!-- 3. Motor de análise (sem DOM) -->
+  <script src="engine/typeCalculator.js"></script>
+  <script src="engine/bsr.js"></script>
+  <script src="engine/gameContext.js"></script>
+  <script src="engine/teamAnalyzer.js"></script>
+  <script src="engine/scoringConfig.js"></script>
+  <script src="engine/teamScorer.js"></script>
+  <script src="engine/insights.js"></script>
+  <script src="engine/recommendationEngine.js"></script>
+  <script src="engine/teamGenerator.js"></script>
+
+  <!-- 4. Interface -->
+  <script src="ui/dom.js"></script>
+  <script src="ui/components.js"></script>
+  <script src="ui/homeView.js"></script>
+  <script src="ui/teamBuilder.js"></script>
+  <script src="ui/analysisView.js"></script>
+  <script src="ui/recommendationView.js"></script>
+  <script src="ui/quickView.js"></script>
+  <script src="ui/generatorView.js"></script>
+  <script src="ui/pokedexView.js"></script>
+  <script src="ui/settingsView.js"></script>
+
+  <!-- 5. Aplicação -->
+  <script src="app.js"></script>
+  <script>
+    // PWA: só registra o service worker quando servido por http(s) (GitHub Pages),
+    // nunca abrindo o arquivo direto (file://), onde ele não é suportado.
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !window.Capacitor) {
+      window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+    }
+  </script>
+</body>
+</html>

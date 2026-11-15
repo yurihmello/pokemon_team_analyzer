@@ -1,0 +1,6 @@
+{
+  "appId": "io.github.pokemonteamanalyzer",
+  "appName": "Team Analyzer",
+  "webDir": "www",
+  "android": { "backgroundColor": "#eceff3" }
+}

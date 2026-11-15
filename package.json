@@ -1,0 +1,17 @@
+{
+  "name": "pokemon-team-analyzer",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Análise de times Pokémon por jogo (HTML/CSS/JS). Web, PWA e Android (Capacitor).",
+  "scripts": {
+    "build:data": "node tools/build-data.mjs",
+    "build:web": "node tools/build-web.mjs",
+    "build:www": "node tools/build-web.mjs --www",
+    "test": "node tests/engine.test.mjs"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/cli": "^8.6.0",
+    "@capacitor/core": "^8.6.0"
+  }
+}
